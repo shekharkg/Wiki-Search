@@ -7,6 +7,7 @@ import android.content.UriMatcher
 import android.database.Cursor
 import android.database.MatrixCursor
 import android.net.Uri
+import com.google.gson.Gson
 import com.shekharkg.wikisearch.dao.SuggestionData
 
 /**
@@ -43,7 +44,7 @@ class WikiSearchContentProvider : ContentProvider() {
           mRow[0] = "" + counter++
           mRow[1] = page.title
           mRow[2] = page.description
-          mRow[3] = page.pageid
+          mRow[3] = Gson().toJson(page)
 
           searchResults.addRow(mRow)
         }
