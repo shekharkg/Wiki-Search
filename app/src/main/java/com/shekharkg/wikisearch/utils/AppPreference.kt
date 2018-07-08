@@ -6,11 +6,10 @@ import android.content.SharedPreferences
 
 /**
  * Created by shekhar on 7/8/18.
- * Tricog Health Services Pvt Ltd © 2018 | All rights reserved
  */
 
 
-public class AppPreference {
+class AppPreference {
   private var sharedPreference: SharedPreferences? = null
   private val MSG_ILLEGAL_ARGS = "The argument should be the application context!"
   private val VALUE_NOT_SET: String? = null

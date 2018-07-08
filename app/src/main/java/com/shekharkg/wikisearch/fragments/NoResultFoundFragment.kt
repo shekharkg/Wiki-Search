@@ -9,7 +9,6 @@ import com.shekharkg.wikisearch.R
 
 /**
  * Created by shekhar on 7/8/18.
- * Tricog Health Services Pvt Ltd © 2018 | All rights reserved
  */
 class NoResultFoundFragment : Fragment() {
 
