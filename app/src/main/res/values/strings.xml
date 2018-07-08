@@ -4,4 +4,5 @@
   <string name="descNoResultIV">No Result</string>
   <string name="noResultFound">No Result Found</string>
   <string name="noInternetConnectivity">No Internet Connectivity</string>
+  <string name="search_hint">Search</string>
 </resources>
