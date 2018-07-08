@@ -1,3 +1,7 @@
 <resources>
   <string name="app_name">Wiki Search</string>
+  <string name="descErrorIV">No Internet</string>
+  <string name="descNoResultIV">No Result</string>
+  <string name="noResultFound">No Result Found</string>
+  <string name="noInternetConnectivity">No Internet Connectivity</string>
 </resources>

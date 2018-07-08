@@ -15,7 +15,6 @@ build/
 
 
 
-.gitignore
 .idea/caches/
 .idea/codeStyles/
 .idea/compiler.xml
@@ -24,7 +23,6 @@ build/
 .idea/misc.xml
 .idea/runConfigurations.xml
 .idea/vcs.xml
-build.gradle
 gradle.properties
 gradle/
 gradlew
