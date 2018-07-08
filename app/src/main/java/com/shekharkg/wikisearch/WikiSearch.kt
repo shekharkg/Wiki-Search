@@ -6,11 +6,11 @@ import com.shekharkg.wikisearch.utils.AppPreference
 /**
  * Created by shekhar on 7/8/18.
  */
-class WikiSearch: Application() {
+class WikiSearch : Application() {
 
   override fun onCreate() {
     super.onCreate()
-    AppPreference().initPreferences(this)
+    AppPreference.initPreferences(this)
   }
 
 }

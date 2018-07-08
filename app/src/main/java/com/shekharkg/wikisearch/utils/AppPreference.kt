@@ -9,10 +9,12 @@ import android.content.SharedPreferences
  */
 
 
-class AppPreference {
+object AppPreference {
   private var sharedPreference: SharedPreferences? = null
   private val MSG_ILLEGAL_ARGS = "The argument should be the application context!"
   private val VALUE_NOT_SET: String? = null
+
+  const val GET_CACHED_DATA: String = "GET_CACHED_DATA"
 
 
   fun initPreferences(applicationContext: Context) {
