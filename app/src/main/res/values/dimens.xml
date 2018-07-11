@@ -2,4 +2,9 @@
   <dimen name="textHeader">22sp</dimen>
   <dimen name="minus40">-40dp</dimen>
   <dimen name="paddingSearchIV">80dp</dimen>
+  <dimen name="searchResultIvDimen">60dp</dimen>
+  <dimen name="dimen8">8dp</dimen>
+  <dimen name="dimen16">16dp</dimen>
+  <dimen name="textTitle">18sp</dimen>
+  <dimen name="textDesc">16sp</dimen>
 </resources>
