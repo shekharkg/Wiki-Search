@@ -116,8 +116,8 @@ class MainActivity : AppCompatActivity(), CallBack, SearchNowFragment.SearchOnCl
 
     val pageList: MutableList<Page> = mutableListOf()
 
-    if (jsonObject.getJSONObject("query") != null &&
-        jsonObject.getJSONObject("query").getJSONArray("pages") != null &&
+    if (jsonObject.has("query")&&
+        jsonObject.getJSONObject("query").has("pages")  &&
         jsonObject.getJSONObject("query").getJSONArray("pages").length() > 0) {
 
       val pagesArray = jsonObject.getJSONObject("query").getJSONArray("pages");
