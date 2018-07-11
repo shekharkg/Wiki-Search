@@ -18,7 +18,8 @@
     tools:ignore="GoogleAppIndexingWarning">
     <activity
       android:name=".activities.MainActivity"
-      android:launchMode="singleTop">
+      android:launchMode="singleTop"
+      android:screenOrientation="portrait">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <action android:name="android.intent.action.SEARCH"/>
@@ -30,6 +31,11 @@
         android:name="android.app.searchable"
         android:resource="@xml/searchable"/>
     </activity>
+
+    <activity
+      android:name=".activities.WebViewActivity"
+      android:screenOrientation="portrait"
+      android:theme="@style/AppTheme"/>
 
     <meta-data
       android:name="preloaded_fonts"

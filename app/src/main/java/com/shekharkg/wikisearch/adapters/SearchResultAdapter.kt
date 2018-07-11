@@ -12,6 +12,8 @@ import com.shekharkg.wikisearch.viewholders.SearchResultViewHolder
  */
 class SearchResultAdapter(private var pages: List<Page>) : RecyclerView.Adapter<SearchResultViewHolder>() {
 
+  private var clickListener: SearchItemClickListener? = null
+
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchResultViewHolder {
     val view = LayoutInflater.from(parent.context).inflate(R.layout.item_search_result, null, false)
 
@@ -20,9 +22,22 @@ class SearchResultAdapter(private var pages: List<Page>) : RecyclerView.Adapter<
 
   override fun onBindViewHolder(holder: SearchResultViewHolder, position: Int) {
     holder.bindPage(pages[position])
+
+    holder.itemView.setOnClickListener {
+      if (clickListener != null)
+        clickListener!!.onItemClicked(position)
+    }
   }
 
   override fun getItemCount(): Int {
     return pages.size
+  }
+
+  fun setOnItemClickListener(listener: SearchItemClickListener) {
+    this.clickListener = listener
+  }
+
+  interface SearchItemClickListener {
+    fun onItemClicked(position: Int)
   }
 }

@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -75,16 +74,17 @@ class MainActivity : AppCompatActivity(), CallBack, SearchNowFragment.SearchOnCl
       val searchQuery = intent.getStringExtra(SearchManager.QUERY)
       searchWiki(searchQuery.replace(" ", "+"))
     } else if (Intent.ACTION_VIEW == intent.action) {
-      val selectedPageId = intent.dataString
-      Toast.makeText(this, "ELSE: selected search suggestion " + selectedPageId!!,
-          Toast.LENGTH_SHORT).show()
+      val selectedPage = intent.dataString
+      val intent = Intent(this, WebViewActivity::class.java)
+      intent.putExtra("PAGE", selectedPage)
+      startActivity(intent)
     }
   }
 
   private fun searchWiki(query: String) {
     if (WikiUtils.isNetworkConnected(this)) {
       dialog!!.show()
-      NetworkClient.getMethod(this, query)
+      NetworkClient.getMethod(NetworkClient.QUERY_BASE_URL + query, this)
     } else
       addFragment(NoInternetFragment())
   }
@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity(), CallBack, SearchNowFragment.SearchOnCl
   override fun <T> successResponse(responseObject: T, statusCode: Int) {
     dialog!!.dismiss()
     val list = parseResponseData(responseObject as String)
-    Log.e("SUCCESS", responseObject as String)
+//    Log.e("SUCCESS", responseObject as String)
 
     if (list.isNotEmpty()) {
       SuggestionData.saveSuggestions(list)
@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity(), CallBack, SearchNowFragment.SearchOnCl
 
   override fun failureResponse(jsonResponse: String, statusCode: Int) {
     dialog!!.dismiss()
-    Log.e("FAILURE", jsonResponse)
+//    Log.e("FAILURE", jsonResponse)
     Toast.makeText(this, jsonResponse, Toast.LENGTH_SHORT).show()
   }
 

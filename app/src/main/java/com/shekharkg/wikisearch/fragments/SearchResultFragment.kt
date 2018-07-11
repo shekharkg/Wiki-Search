@@ -1,5 +1,6 @@
 package com.shekharkg.wikisearch.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -9,14 +10,17 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.gson.Gson
 import com.shekharkg.wikisearch.R
+import com.shekharkg.wikisearch.activities.WebViewActivity
 import com.shekharkg.wikisearch.adapters.SearchResultAdapter
 import com.shekharkg.wikisearch.dao.Page
 import com.shekharkg.wikisearch.utils.CustomList
+import android.support.v7.widget.DividerItemDecoration
+
 
 /**
  * Created by shekhar on 7/8/18.
  */
-class SearchResultFragment : Fragment() {
+class SearchResultFragment : Fragment(), SearchResultAdapter.SearchItemClickListener {
 
   private var pages: List<Page> = ArrayList()
   private var recyclerView: RecyclerView? = null
@@ -38,8 +42,19 @@ class SearchResultFragment : Fragment() {
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
+
     recyclerView!!.layoutManager = LinearLayoutManager(context)
-    recyclerView!!.adapter = SearchResultAdapter(pages)
+    recyclerView!!.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL))
+
+    val adapter = SearchResultAdapter(pages)
+    adapter.setOnItemClickListener(this)
+    recyclerView!!.adapter = adapter
+  }
+
+  override fun onItemClicked(position: Int) {
+    val intent = Intent(context, WebViewActivity::class.java)
+    intent.putExtra("PAGE", Gson().toJson(pages[position]))
+    startActivity(intent)
   }
 
 

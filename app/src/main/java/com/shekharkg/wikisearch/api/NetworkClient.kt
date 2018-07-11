@@ -8,7 +8,8 @@ import com.loopj.android.http.AsyncHttpResponseHandler
  */
 object NetworkClient {
 
-  private val BASE_URL = "https://en.wikipedia.org//w/api.php?action=query&format=json&prop=pageimages%7Cpageterms&generator=prefixsearch&redirects=1&formatversion=2&piprop=thumbnail&pithumbsize=50&pilimit=10&wbptterms=description&gpslimit=30&gpssearch="
+  val QUERY_BASE_URL = "https://en.wikipedia.org//w/api.php?action=query&format=json&prop=pageimages%7Cpageterms&generator=prefixsearch&redirects=1&formatversion=2&piprop=thumbnail&pithumbsize=50&pilimit=10&wbptterms=description&gpslimit=30&gpssearch="
+  val PAGE_BASE_URL = "https://en.wikipedia.org/w/api.php?action=query&prop=info&inprop=url&format=json&pageids="
 
 
   private val client = AsyncHttpClient(true, 80, 443)
@@ -16,9 +17,9 @@ object NetworkClient {
 
 
   @Synchronized
-  fun getMethod(callBack: CallBack, query: String) {
+  fun getMethod(url: String, callBack: CallBack) {
     client.setTimeout(SOCKET_TIMEOUT)
-    client.get(BASE_URL + query, responseHandler(callBack))
+    client.get(url, responseHandler(callBack))
   }
 
 

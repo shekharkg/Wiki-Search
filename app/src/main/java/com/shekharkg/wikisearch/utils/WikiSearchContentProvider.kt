@@ -44,7 +44,7 @@ class WikiSearchContentProvider : ContentProvider() {
           mRow[0] = "" + counter++
           mRow[1] = page.title
           mRow[2] = page.description
-          mRow[3] = page.pageid
+          mRow[3] = Gson().toJson(page)
 
           searchResults.addRow(mRow)
         }
