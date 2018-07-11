@@ -6,4 +6,5 @@
   <string name="noInternetConnectivity">No Internet Connectivity</string>
   <string name="search_hint">Search</string>
   <string name="descSearchNowIV">Search Now</string>
+  <string name="loading">Searching…</string>
 </resources>

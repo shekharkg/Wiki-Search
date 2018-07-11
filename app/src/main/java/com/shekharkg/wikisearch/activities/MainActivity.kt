@@ -1,5 +1,6 @@
 package com.shekharkg.wikisearch.activities
 
+import android.app.Dialog
 import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
@@ -26,6 +27,7 @@ import org.json.JSONObject
 class MainActivity : AppCompatActivity(), CallBack, SearchNowFragment.SearchOnClickListener {
 
   private val fragmentManager = supportFragmentManager
+  private var dialog: Dialog? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -34,6 +36,8 @@ class MainActivity : AppCompatActivity(), CallBack, SearchNowFragment.SearchOnCl
     setSupportActionBar(toolbar)
 
     addFragment(SearchNowFragment())
+
+    dialog = WikiUtils.progressDialog(this)
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -71,22 +75,22 @@ class MainActivity : AppCompatActivity(), CallBack, SearchNowFragment.SearchOnCl
       val searchQuery = intent.getStringExtra(SearchManager.QUERY)
       searchWiki(searchQuery.replace(" ", "+"))
     } else if (Intent.ACTION_VIEW == intent.action) {
-      val selectedSuggestionRowId = intent.dataString
-      Toast.makeText(this, "ELSE: selected search suggestion " + selectedSuggestionRowId!!,
+      val selectedPageId = intent.dataString
+      Toast.makeText(this, "ELSE: selected search suggestion " + selectedPageId!!,
           Toast.LENGTH_SHORT).show()
     }
   }
 
   private fun searchWiki(query: String) {
-    Toast.makeText(this, query, Toast.LENGTH_SHORT).show()
-
-    if (WikiUtils.isNetworkConnected(this))
+    if (WikiUtils.isNetworkConnected(this)) {
+      dialog!!.show()
       NetworkClient.getMethod(this, query)
-    else
+    } else
       addFragment(NoInternetFragment())
   }
 
   override fun <T> successResponse(responseObject: T, statusCode: Int) {
+    dialog!!.dismiss()
     val list = parseResponseData(responseObject as String)
     Log.e("SUCCESS", responseObject as String)
 
@@ -102,7 +106,9 @@ class MainActivity : AppCompatActivity(), CallBack, SearchNowFragment.SearchOnCl
   }
 
   override fun failureResponse(jsonResponse: String, statusCode: Int) {
+    dialog!!.dismiss()
     Log.e("FAILURE", jsonResponse)
+    Toast.makeText(this, jsonResponse, Toast.LENGTH_SHORT).show()
   }
 
   private fun parseResponseData(responseData: String): MutableList<Page> {
