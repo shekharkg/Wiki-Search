@@ -9,12 +9,15 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import com.google.gson.Gson
 import com.shekharkg.wikisearch.R
 import com.shekharkg.wikisearch.api.CallBack
 import com.shekharkg.wikisearch.api.NetworkClient
 import com.shekharkg.wikisearch.dao.Page
+import com.shekharkg.wikisearch.dao.SuggestionData
 import com.shekharkg.wikisearch.fragments.NoInternetFragment
 import com.shekharkg.wikisearch.fragments.NoResultFoundFragment
+import com.shekharkg.wikisearch.fragments.SearchResultFragment
 import com.shekharkg.wikisearch.utils.WikiUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONObject
@@ -89,13 +92,22 @@ class MainActivity : AppCompatActivity(), CallBack {
   override fun <T> successResponse(responseObject: T, statusCode: Int) {
     val list = parseResponseData(responseObject as String)
     Log.e("SUCCESS", responseObject as String)
+
+    if (list.isNotEmpty()) {
+      SuggestionData.saveSuggestions(list)
+      val searchResultFragment = SearchResultFragment()
+      val bundle = Bundle()
+      bundle.putString("PAGES", Gson().toJson(list))
+      searchResultFragment.arguments = bundle
+      addFragment(searchResultFragment)
+    }
   }
 
   override fun failureResponse(jsonResponse: String, statusCode: Int) {
     Log.e("FAILURE", jsonResponse)
   }
 
-  private fun parseResponseData(responseData: String): List<Page> {
+  private fun parseResponseData(responseData: String): MutableList<Page> {
     val jsonObject = JSONObject(responseData)
 
     val pageList: MutableList<Page> = mutableListOf<Page>()

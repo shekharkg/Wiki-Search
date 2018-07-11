@@ -14,7 +14,7 @@ object AppPreference {
   private val MSG_ILLEGAL_ARGS = "The argument should be the application context!"
   private val VALUE_NOT_SET: String? = null
 
-  const val GET_CACHED_DATA: String = "GET_CACHED_DATA"
+  const val CACHED_DATA: String = "CACHED_DATA"
 
 
   fun initPreferences(applicationContext: Context) {
