@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<ImageView
   xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/imageView"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="wrap_content"
+  android:clickable="true"
+  android:contentDescription="@string/descSearchNowIV"
+  android:focusable="true"
+  android:padding="@dimen/paddingSearchIV"
+  android:src="@drawable/search"/>
 
-</android.support.constraint.ConstraintLayout>
+
+

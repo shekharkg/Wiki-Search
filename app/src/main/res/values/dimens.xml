@@ -1,4 +1,5 @@
 <resources>
   <dimen name="textHeader">22sp</dimen>
   <dimen name="minus40">-40dp</dimen>
+  <dimen name="paddingSearchIV">80dp</dimen>
 </resources>

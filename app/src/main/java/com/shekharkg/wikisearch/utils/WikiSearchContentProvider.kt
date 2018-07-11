@@ -19,8 +19,8 @@ class WikiSearchContentProvider : ContentProvider() {
     return true
   }
 
-  override fun query(uri: Uri, projection: Array<String>?, selection: String?, selectionArgs: Array<String>?,
-                     sortOrder: String?): Cursor? {
+  override fun query(uri: Uri, projection: Array<String>?, selection: String?,
+                     selectionArgs: Array<String>?, sortOrder: String?): Cursor? {
 
     return when (uriMatcher.match(uri)) {
       1 -> {

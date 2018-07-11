@@ -17,13 +17,13 @@ import com.shekharkg.wikisearch.dao.Page
 import com.shekharkg.wikisearch.dao.SuggestionData
 import com.shekharkg.wikisearch.fragments.NoInternetFragment
 import com.shekharkg.wikisearch.fragments.NoResultFoundFragment
+import com.shekharkg.wikisearch.fragments.SearchNowFragment
 import com.shekharkg.wikisearch.fragments.SearchResultFragment
 import com.shekharkg.wikisearch.utils.WikiUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONObject
 
-class MainActivity : AppCompatActivity(), CallBack {
-
+class MainActivity : AppCompatActivity(), CallBack, SearchNowFragment.SearchOnClickListener {
 
   private val fragmentManager = supportFragmentManager
 
@@ -32,6 +32,8 @@ class MainActivity : AppCompatActivity(), CallBack {
     setContentView(R.layout.activity_main)
 
     setSupportActionBar(toolbar)
+
+    addFragment(SearchNowFragment())
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -50,13 +52,8 @@ class MainActivity : AppCompatActivity(), CallBack {
     }
   }
 
-  override fun onResume() {
-    super.onResume()
-
-    if (!WikiUtils.isNetworkConnected(this))
-      addFragment(NoInternetFragment())
-    else
-      addFragment(NoResultFoundFragment())
+  override fun onSearchNowClicked() {
+    super.onSearchRequested()
   }
 
   private fun addFragment(fragment: Fragment) {
@@ -100,7 +97,8 @@ class MainActivity : AppCompatActivity(), CallBack {
       bundle.putString("PAGES", Gson().toJson(list))
       searchResultFragment.arguments = bundle
       addFragment(searchResultFragment)
-    }
+    } else
+      addFragment(NoResultFoundFragment())
   }
 
   override fun failureResponse(jsonResponse: String, statusCode: Int) {
@@ -110,7 +108,7 @@ class MainActivity : AppCompatActivity(), CallBack {
   private fun parseResponseData(responseData: String): MutableList<Page> {
     val jsonObject = JSONObject(responseData)
 
-    val pageList: MutableList<Page> = mutableListOf<Page>()
+    val pageList: MutableList<Page> = mutableListOf()
 
     if (jsonObject.getJSONObject("query") != null &&
         jsonObject.getJSONObject("query").getJSONArray("pages") != null &&
@@ -130,8 +128,10 @@ class MainActivity : AppCompatActivity(), CallBack {
         if (pageObj.has("thumbnail") && pageObj.getJSONObject("thumbnail").has("source"))
           thumbnail = pageObj.getJSONObject("thumbnail").getString("source")
 
-        if (pageObj.has("terms") && pageObj.getJSONObject("terms").has("description"))
-          description = pageObj.getJSONObject("terms").getString("description")
+        if (pageObj.has("terms") && pageObj.getJSONObject("terms").has("description")) {
+          val descArray = pageObj.getJSONObject("terms").getJSONArray("description")
+          description = descArray.join(", ").replace("\"", "")
+        }
 
         pageList.add(Page(pageId, title, thumbnail, description))
 
