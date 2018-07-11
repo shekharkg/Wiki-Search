@@ -1,13 +1,6 @@
 package com.shekharkg.wikisearch.dao
 
 /**
- * Created by shekhar on 7/9/18.
+ * Created by shekhar on 7/11/18.
  */
-object Page {
-
-  var pageid: Double = 0.toDouble()
-  var title: String? = null
-  var thumbnailUrl: String? = null
-  var description: String? = null
-
-}
+class Page(val pageid: String?, val title: String?, val thumbnailUrl: String?, val description: String?)

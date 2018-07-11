@@ -10,17 +10,17 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.shekharkg.wikisearch.R
-import com.shekharkg.wikisearch.api.ApiClient
+import com.shekharkg.wikisearch.api.CallBack
+import com.shekharkg.wikisearch.api.NetworkClient
+import com.shekharkg.wikisearch.dao.Page
 import com.shekharkg.wikisearch.fragments.NoInternetFragment
 import com.shekharkg.wikisearch.fragments.NoResultFoundFragment
 import com.shekharkg.wikisearch.utils.WikiUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-class MainActivity : AppCompatActivity(), Callback<JSONObject> {
+class MainActivity : AppCompatActivity(), CallBack {
+
 
   private val fragmentManager = supportFragmentManager
 
@@ -81,18 +81,53 @@ class MainActivity : AppCompatActivity(), Callback<JSONObject> {
     Toast.makeText(this, query, Toast.LENGTH_SHORT).show()
 
     if (WikiUtils.isNetworkConnected(this))
-      ApiClient().getApiInterface()
-          .searchWiki(gpssearch = query).enqueue(this)
+      NetworkClient.getMethod(this, query)
     else
       addFragment(NoInternetFragment())
   }
 
-  override fun onResponse(call: Call<JSONObject>?, response: Response<JSONObject>?) {
-    Log.e("SUCCESS", response!!.body().toString())
+  override fun <T> successResponse(responseObject: T, statusCode: Int) {
+    val list = parseResponseData(responseObject as String)
+    Log.e("SUCCESS", responseObject as String)
   }
 
-  override fun onFailure(call: Call<JSONObject>?, t: Throwable?) {
-    Log.e("FAILURE", "")
+  override fun failureResponse(jsonResponse: String, statusCode: Int) {
+    Log.e("FAILURE", jsonResponse)
+  }
+
+  private fun parseResponseData(responseData: String): List<Page> {
+    val jsonObject = JSONObject(responseData)
+
+    val pageList: MutableList<Page> = mutableListOf<Page>()
+
+    if (jsonObject.getJSONObject("query") != null &&
+        jsonObject.getJSONObject("query").getJSONArray("pages") != null &&
+        jsonObject.getJSONObject("query").getJSONArray("pages").length() > 0) {
+
+      val pagesArray = jsonObject.getJSONObject("query").getJSONArray("pages");
+
+      for (i in 0..(pagesArray.length() - 1)) {
+        val pageObj = pagesArray.getJSONObject(i)
+
+        val pageId: String = pageObj.getString("pageid")
+        val title: String = pageObj.getString("title")
+
+        var thumbnail: String? = null
+        var description: String? = null
+
+        if (pageObj.has("thumbnail") && pageObj.getJSONObject("thumbnail").has("source"))
+          thumbnail = pageObj.getJSONObject("thumbnail").getString("source")
+
+        if (pageObj.has("terms") && pageObj.getJSONObject("terms").has("description"))
+          description = pageObj.getJSONObject("terms").getString("description")
+
+        pageList.add(Page(pageId, title, thumbnail, description))
+
+      }
+
+    }
+
+    return pageList
   }
 
 }
